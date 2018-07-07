@@ -1,0 +1,109 @@
+create database pintagram;
+
+create table users(id serial, name varchar, primary key(id));
+
+create table images(id serial, name varchar, user_id integer, primary key(id), foreign key (user_id) references users(id));
+
+
+create table likes(id serial, img_id integer, user_id integer, primary key(id), foreign key (user_id) references users(id), foreign key(img_id) references images(id));
+
+
+create table tags(id serial, name varchar, primary key(id));
+
+ create table img_tag(id serial, img_id integer, tag_id integer, primary key(id), foreign key (tag_id) references tags(id), foreign key(img_id) references images(id));
+
+
+
+alter table likes add constraint con UNIQUE (img_id, user_id);
+
+alter table img_tag add constraint cons UNIQUE (img_id, tag_id);
+
+insert into users (name) values ('tam');
+insert into images (name, user_id) values ('foo1.png', 1);
+insert into images (name, user_id) values ('foo2.png', 1);
+
+insert into users (name) values ('pin');
+insert into images (name, user_id) values ('foto1.png', 2);
+insert into images (name, user_id) values ('foto2.png', 2);
+
+insert into users (name) values ('sil');
+
+insert into tags (name) values ( 'tag1');
+insert into tags (name) values ( 'tag2');
+insert into tags (name) values ( 'tag3');
+insert into tags (name) values ( 'tag4');
+insert into tags (name) values ( 'tag5');
+insert into tags (name) values ( 'tag6');
+insert into tags (name) values ( 'tag7');
+insert into tags (name) values ( 'tag8');
+
+insert into img_tag (img_id, tag_id) values (1, 1);
+insert into img_tag (img_id, tag_id) values (1, 2);
+insert into img_tag (img_id, tag_id) values (1, 3);
+
+
+insert into img_tag (img_id, tag_id) values (2, 3);
+insert into img_tag (img_id, tag_id) values (2, 4);
+insert into img_tag (img_id, tag_id) values (2, 5);
+
+
+insert into img_tag (img_id, tag_id) values (3, 5);
+insert into img_tag (img_id, tag_id) values (3, 6);
+insert into img_tag (img_id, tag_id) values (3, 7);
+
+insert into img_tag (img_id, tag_id) values (4, 7);
+insert into img_tag (img_id, tag_id) values (4, 8);
+insert into img_tag (img_id, tag_id) values (4, 1);
+
+
+pintagram=# select * from users;
+ id | name 
+----+------
+  1 | tam
+  2 | pin
+
+
+pintagram=# select * from images;
+ id |   name    | user_id 
+----+-----------+---------
+  1 | foo1.png  |       1
+  2 | foo2.png  |       1
+  3 | foto1.png |       2
+  4 | foto2.png |       2
+
+
+insert into likes (img_id, user_id) values (1, 1);
+insert into likes (img_id, user_id) values (1, 2);
+insert into likes (img_id, user_id) values (1, 3);
+
+insert into likes (img_id, user_id) values (2, 1);
+insert into likes (img_id, user_id) values (2, 2);
+insert into likes (img_id, user_id) values (2, 3);
+
+insert into likes (img_id, user_id) values (3, 1);
+insert into likes (img_id, user_id) values (3, 2);
+insert into likes (img_id, user_id) values (3, 3);
+
+insert into likes (img_id, user_id) values (4, 2);
+insert into likes (img_id, user_id) values (4, 1);
+insert into likes (img_id, user_id) values (4, 4);
+
+
+
+Crear una consulta que muestre el nombre de la imagen y la cantidad de likes que tiene esa imagen.
+
+select count(*) as cantidad, i.name from likes l join images i on(i.id = l.img_id) group by i.id;
+
+
+Crear una consulta que muestre el nombre del usuario y los nombres de las fotos que le pertenecen.
+
+select * from users u join images i on(i.user_id = u.id);
+
+
+Crear una consulta que muestre el nombre del tag y la cantidad de imagenes asociadas a ese tag.
+
+select count(*) as cant, t.name from tags t join img_tag it on(it.tag_id = t.id) group by t.id;
+
+
+
+
